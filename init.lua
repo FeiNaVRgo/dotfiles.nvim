@@ -208,7 +208,6 @@ vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper win
 -- vim.keymap.set("n", "<C-S-j>", "<C-w>J", { desc = "Move window to the lower" })
 -- vim.keymap.set("n", "<C-S-k>", "<C-w>K", { desc = "Move window to the upper" })
 
-
 --for _, group in ipairs(vim.fn.getcompletion("@lsp", "highlight")) do
 --  if(group ~= "@lsp.type.parameter") then
 --    vim.api.nvim_set_hl(0, group, {})
@@ -1112,10 +1111,12 @@ vim.api.nvim_set_keymap('n', '<space>xp', '', {
   end,
 })
 
-vim.api.nvim_create_autocmd('VimEnter', {
+--[[
+--vim.api.nvim_create_autocmd('VimEnter', {
   callback = function()
     vim.cmd 'Alpha'
   end,
 })
+]]
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
