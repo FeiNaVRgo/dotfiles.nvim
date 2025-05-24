@@ -25,7 +25,6 @@ return {
   --    },
   --    hint_enable = false,
   --  },
-  --},
   {
     'coffebar/neovim-project',
     opts = {
@@ -1205,4 +1204,11 @@ return {
   --{
   --  'ray-x/navigator.lua',
   --},
+  {
+    'anhle199/NvChad-nvim-colorizer.lua',
+
+    config = function()
+      require('colorizer').setup()
+    end,
+  },
 }

@@ -689,7 +689,7 @@ require('lazy').setup({
           --
           -- When you move your cursor, the highlights will be cleared (the second autocommand).
           local client = vim.lsp.get_client_by_id(event.data.client_id)
-
+          --client.server_capabilities.semanticTokensProvider = nil
           if client and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_documentHighlight, event.buf) then
             local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
             vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
@@ -724,10 +724,25 @@ require('lazy').setup({
           end
 
           for _, group in ipairs(vim.fn.getcompletion('@lsp', 'highlight')) do
-            if group == '@lsp.type.property' or group == '@lsp.type.function' then
+            if
+              group ~= '@lsp.type.type'
+              and group ~= '@lsp.type.typeParameter'
+              and group ~= '@lsp.type.macro'
+              and group ~= '@lsp.type.class'
+              and group ~= '@lsp.type.struct'
+              and group ~= '@lsp.type.parameter'
+              and group ~= '@lsp.type.interface'
+              and group ~= '@lsp.type.decorator'
+              and group ~= '@lsp.type.function'
+              and group ~= '@lsp.type.namespace'
+            then
               vim.api.nvim_set_hl(0, group, {})
             end
           end
+          --vim.api.nvim_set_hl(0, '@lsp.type.parameter', { fg = '#aaafff' })
+          --vim.api.nvim_set_hl(0, '@lsp.type.property', {})
+          --vim.api.nvim_set_hl(0, '@lsp.type.type', { fg = '#a775c1' })
+          --vim.api.nvim_set_hl(0, '@lsp.type.typeParameter', { fg = '#a775c1' })
         end,
       })
 
@@ -983,14 +998,45 @@ require('lazy').setup({
       signature = { enabled = true },
     },
   },
+  {
+    'EdenEast/nightfox.nvim',
+    priority = 1002,
+    config = function()
+      require('nightfox').setup {
+        styles = {
+          comments = { italic = false },
+        },
+      }
+    end,
+  },
+  {
+    'rebelot/kanagawa.nvim',
 
-  { -- You can easily change to a different colorscheme.
-    -- Change the name of the colorscheme plugin below, and then
-    -- change the command in the config to whatever the name of that colorscheme is.
-    --
-    -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
+    priority = 1001, -- Make sure to load this before all the other start plugins.
+    config = function()
+      ---@diagnostic disable-next-line: missing-fields
+      require('kanagawa').setup {
+        styles = {
+          comments = { italic = false }, -- Disable italics in comments
+        },
+      }
+    end,
+  },
+  {
+    'marko-cerovac/material.nvim',
+    priority = 1003,
+    config = function()
+      ---@diagnostic disable-next-line: missing-fields
+      require('material').setup {
+        styles = {
+          comments = { italic = false }, -- Disable italics in comments
+        },
+      }
+    end,
+  },
+  {
     'folke/tokyonight.nvim',
-    priority = 1000, -- Make sure to load this before all the other start plugins.
+    priority = 999, -- Make sure to load this before all the other start plugins.
     config = function()
       ---@diagnostic disable-next-line: missing-fields
       require('tokyonight').setup {
@@ -998,14 +1044,24 @@ require('lazy').setup({
           comments = { italic = false }, -- Disable italics in comments
         },
       }
-
-      -- Load the colorscheme here.
-      -- Like many other themes, this one has different styles, and you could load
-      -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'tokyonight-night'
     end,
   },
+  {
+    'thesimonho/kanagawa-paper.nvim',
+    lazy = false,
+    priority = 1004,
+    opts = {},
+    config = function()
+      ---@diagnostic disable-next-line: missing-fields
+      require('kanagawa-paper').setup {
+        styles = {
+          comments = { italic = false },
+        },
+      }
 
+      vim.cmd.colorscheme 'kanagawa-paper-ink'
+    end,
+  },
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
 
